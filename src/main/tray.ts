@@ -1,6 +1,6 @@
 import { Tray, Menu, nativeImage, dialog, app, NativeImage } from 'electron';
 import * as path from 'path';
-import { showPopupWindow, hidePopupWindow, getPopupWindow } from './windows';
+import { showPopupWindow, hidePopupWindow, getPopupWindow, resetPopupWindowBounds } from './windows';
 import { addWorkspace } from './services/workspace-registry';
 
 let tray: Tray | null = null;
@@ -129,8 +129,18 @@ function createContextMenu(): Menu {
     },
     { type: 'separator' },
     {
-      label: 'Show Window',
+      label: 'Toggle Floating Window',
       click: () => {
+        const popup = getPopupWindow();
+        if (!popup) return;
+        if (popup.isVisible()) hidePopupWindow();
+        else showPopupWindow();
+      },
+    },
+    {
+      label: 'Reset Floating Window Position',
+      click: () => {
+        resetPopupWindowBounds();
         showPopupWindow();
       },
     },

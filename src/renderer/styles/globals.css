@@ -86,12 +86,32 @@ body {
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  /* Make the whole PiP window draggable (like YouTube mini player) */
+  -webkit-app-region: drag;
 }
 
 .app-content {
   display: flex;
   flex: 1;
   min-height: 0;
+}
+
+/* Controls and scroll areas must be opt-out of drag or they won't receive mouse events */
+.app button,
+.app input,
+.app textarea,
+.app select,
+.app a,
+.app .project-list,
+.app .project-list-header,
+.app .project-list-items,
+.app .project-card,
+.app .project-detail,
+.app .detail-actions,
+.app .detail-question,
+.app .question-content,
+.app .detail-response {
+  -webkit-app-region: no-drag;
 }
 
 /* Header */

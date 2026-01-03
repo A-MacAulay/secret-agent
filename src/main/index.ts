@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { createTray, destroyTray } from './tray';
-import { createPopupWindow, getPopupWindow } from './windows';
+import { createPopupWindow, getPopupWindow, showPopupWindow } from './windows';
 import { registerIPCHandlers } from './ipc-handlers';
 import { initWorkspaceRegistry } from './services/workspace-registry';
 import { initFileWatcher, stopAllWatchers } from './services/file-watcher';
@@ -32,6 +32,11 @@ if (process.platform === 'darwin') {
 }
 
 app.whenReady().then(async () => {
+  // Required on Windows for reliable toast notification behavior (including click-to-focus)
+  if (process.platform === 'win32') {
+    app.setAppUserModelId('com.macaualay.secret-agent');
+  }
+
   // Initialize services
   await initWorkspaceRegistry();
   
@@ -43,6 +48,9 @@ app.whenReady().then(async () => {
   
   // Create tray icon
   createTray();
+
+  // Show the floating window by default (PiP-style)
+  showPopupWindow();
   
   // Start watching workspaces
   initFileWatcher();
